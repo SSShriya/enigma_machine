@@ -26,10 +26,10 @@ std::string Plugboard::swapLetters(std::string text) {
 /* Connects characters in plugboard - fails if either letter already connected to something else */
 void Plugboard::connect() {
   for (std::string pair : plugboardPairs_) {
-    char fst = pair[0];
-    char snd = pair[1];
-    int fstIdx = toIdx(fstIdx);
-    int sndIdx = toIdx(sndIdx);
+    char fst = static_cast<char>(std::toupper(static_cast<unsigned char>(pair[0])));
+    char snd = static_cast<char>(std::toupper(static_cast<unsigned char>(pair[1])));
+    int fstIdx = toIdx(fst);
+    int sndIdx = toIdx(snd);
     if (mapping_[fstIdx] != fst || mapping_[sndIdx] != snd) {
       throw std::runtime_error("A letter on the plugboard cannot be connected to two things");
     }
