@@ -70,7 +70,8 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
     if (!isOption(option)) throw std::runtime_error("Unexpected value: " + option);
 
     if (option == "--rotors") {
-      for (const auto& value : readValues(argc, argv, i, option)) {
+      for (auto& value : readValues(argc, argv, i, option)) {
+        std::transform(value.begin(), value.end(), value.begin(), ::toupper);
         if (validRotors.find(value) == validRotors.end()) {
           throw std::runtime_error("Invalid rotor name: " + value);
         }
@@ -86,18 +87,20 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
       }
     } else if (option == "--reflector") {
       auto values = readValues(argc, argv, i, option);
+      char value = parseLetter(values[0], option);
       if (values.size() != 1) throw std::runtime_error("--reflector needs exactly one value.");
-      if (validReflectors.find(values[0]) == validReflectors.end()) {
+      if (validReflectors.find(std::string() + value) == validReflectors.end()) {
         throw std::runtime_error("Invalid reflector name: " + values[0]);
       }
-      settings.reflector = values[0];
+      settings.reflector = value;
     } else if (option == "--plugboard") {
       settings.plugboardPairs = readValues(argc, argv, i, option);
-      for (const auto& pair : settings.plugboardPairs) {
+      for (auto& pair : settings.plugboardPairs) {
         if (pair.size() != 2 || !std::isalpha(static_cast<unsigned char>(pair[0])) ||
             !std::isalpha(static_cast<unsigned char>(pair[1]))) {
           throw std::runtime_error("Each plugboard pair must have two letters");
         }
+        std::transform(pair.begin(), pair.end(), pair.begin(), ::toupper);
       }
     } else if (option == "--text") {
       if (i + 1 >= argc) throw std::runtime_error("--text needs a message.");
