@@ -5,6 +5,23 @@
 #include "parse_args.h"
 #include "plugboard.h"
 
+/* Rotor + Reflector Wiring strings */
+const std::string WIRING_RTR_I   = "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
+const std::string WIRING_RTR_II  = "AJDKSIRUXBLHWTMCQGZNPYFVOE";
+const std::string WIRITN_RTR_III = "BDFHJLCPRTXVZNYEIWGAKMUSQO";
+const std::string WIRING_RTR_IV  = "ESOVPZJAYQUIRHXLNFTGKDCMWB";
+const std::string WIRING_RTR_V   = "VZBRGITYUPSDNHLXAWMJQOFECK";
+const std::string WIRING_RFL_A   = "EJMZALYXVBWFCRQUONTSPIKHGD";
+const std::string WIRING_RFL_B   = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
+const std::string WIRING_RFL_C   = "FVPJIAOYEDRZXWGCTKUQSBNMHL";
+
+/* Rotor Notches */
+const char NOTCH_RTR_I   = 'Y';
+const char NOTCH_RTR_II  = 'M';
+const char NOTCH_RTR_III = 'D';
+const char NOTCH_RTR_IV  = 'R';
+const char NOTCH_RTR_V   = 'H';
+
 int main(int argc, char* argv[]) {
   try {
     EnigmaSettings settings = parseArguments(argc, argv);

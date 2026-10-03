@@ -2,11 +2,14 @@
 
 #include <algorithm>
 #include <iostream>
+#include <set>
 
 #include "utils.h"
 
 const int MAX_PLUGBOARD_PAIRS = 10;
 const int NUM_ROTORS = 3;
+static const std::set<std::string> validRotors = {"I", "II", "III", "IV", "V"};
+static const std::set<std::string> validReflectors = {"A", "B", "C"};
 
 [[noreturn]] void usage(const char* program, const std::string& error = "") {
   if (!error.empty()) std::cerr << "Error: " << error << "\n\n";
@@ -15,10 +18,10 @@ const int NUM_ROTORS = 3;
             << " --rotors I II III --positions A A A --rings 1 1 1 "
                " --reflector B --plugboard AV BS CG --text \"HELLO WORLD\" \n\n"
             << "Required options:\n"
-            << " --rotors     Rotor names, left to right\n"
+            << " --rotors     Rotor names, left to right. Valid names: I, II, III, IV, V\n"
             << " --positions  Starting window letters for each rotor\n"
             << " --rings      Ring settings for each rotor from 1 to 26\n"
-            << " --reflector  Reflector name\n"
+            << " --reflector  Reflector name. Valid names: A, B, C\n"
             << " --text       Message to encrypt/decrypt\n"
             << "Optional:\n"
             << " --plugboard  Space-separated letter pairs for plugboard substitution\n";
@@ -67,7 +70,12 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
     if (!isOption(option)) throw std::runtime_error("Unexpected value: " + option);
 
     if (option == "--rotors") {
-      settings.rotors = readValues(argc, argv, i, option);
+      for (const auto& value : readValues(argc, argv, i, option)) {
+        if (validRotors.find(value) == validRotors.end()) {
+          throw std::runtime_error("Invalid rotor name: " + value);
+        }
+        settings.rotors.push_back(value);
+      }
     } else if (option == "--positions") {
       for (const auto& value : readValues(argc, argv, i, option)) {
         settings.positions.push_back(parseLetter(value, option));
@@ -79,6 +87,9 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
     } else if (option == "--reflector") {
       auto values = readValues(argc, argv, i, option);
       if (values.size() != 1) throw std::runtime_error("--reflector needs exactly one value.");
+      if (validReflectors.find(values[0]) == validReflectors.end()) {
+        throw std::runtime_error("Invalid reflector name: " + values[0]);
+      }
       settings.reflector = values[0];
     } else if (option == "--plugboard") {
       settings.plugboardPairs = readValues(argc, argv, i, option);

@@ -80,6 +80,15 @@ void testNotEnoughRotorsFail() {
       "must all equal");
 }
 
+void testInvalidRotorsFail() {
+  expectThrows(
+      [] {
+        parse({"enigma", "--rotors", "I", "II", "X", "--positions", "A", "A", "--rings", "1", "1",
+               "1", "--reflector", "B", "--text", "TEST"});
+      },
+      "Invalid rotor");
+}
+
 void testInvalidRingFails() {
   expectThrows(
       [] {
@@ -87,6 +96,15 @@ void testInvalidRingFails() {
                "27", "24", "1", "--reflector", "B", "--text", "TEST"});
       },
       "Ring settings");
+}
+
+void testInvalidReflectorFail() {
+  expectThrows(
+      [] {
+        parse({"enigma", "--rotors", "I", "II", "III", "--positions", "A", "A", "--rings", "1", "1",
+               "1", "--reflector", "Y", "--text", "TEST"});
+      },
+      "Invalid reflector");
 }
 
 void testInvalidPlugboardPairFails() {
@@ -107,6 +125,8 @@ int main() {
       {"lowercase position normalization", testLowercasePositionIsNormalized},
       {"mismatched rotor counts", testMismatchedRotorCountsFail},
       {"not enough rotor counts", testNotEnoughRotorsFail},
+      {"invalid rotor", testInvalidRotorsFail},
+      {"invalid reflector", testInvalidReflectorFail},
       {"invalid ring", testInvalidRingFails},
       {"invalid plugboard pair", testInvalidPlugboardPairFails},
   };
