@@ -6,6 +6,7 @@
 #include "utils.h"
 
 const int MAX_PLUGBOARD_PAIRS = 10;
+const int NUM_ROTORS = 3;
 
 [[noreturn]] void usage(const char* program, const std::string& error = "") {
   if (!error.empty()) std::cerr << "Error: " << error << "\n\n";
@@ -102,9 +103,12 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
     throw std::runtime_error("Missing a required option. Use --help for usage.");
   }
 
-  const size_t rotorCount = settings.rotors.size();
-  if (settings.positions.size() != rotorCount || settings.rings.size() != rotorCount) {
-    throw std::runtime_error("The counts for rotors, positions and rings must match");
+  if (settings.rotors.size() != NUM_ROTORS || settings.positions.size() != NUM_ROTORS ||
+      settings.rings.size() != NUM_ROTORS) {
+    throw std::runtime_error("rotors=" + std::to_string(settings.rotors.size()) +
+                             ", positions=" + std::to_string(settings.positions.size()) +
+                             ", rings=" + std::to_string(settings.rings.size()) +
+                             " must all equal " + std::to_string(NUM_ROTORS));
   }
   if (settings.plugboardPairs.size() > MAX_PLUGBOARD_PAIRS) {
     throw std::runtime_error("The plugboard can have at most 10 pairs");
