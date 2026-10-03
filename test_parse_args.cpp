@@ -5,7 +5,7 @@
 #include <vector>
 
 #define main enigma_program_main
-#include "enigma.cpp"
+#include "parse_args.h"
 #undef main
 
 EnigmaSettings parse(std::vector<std::string> arguments) {
