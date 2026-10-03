@@ -1,0 +1,1 @@
+int toIdx(char c) { return c - 'A'; }

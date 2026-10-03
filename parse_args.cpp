@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include "utils.h"
+
 const int MAX_PLUGBOARD_PAIRS = 10;
 
 [[noreturn]] void usage(const char* program, const std::string& error = "") {
@@ -36,7 +38,7 @@ int parseRing(const std::string& value) {
   try {
     size_t used = 0;
     int ring = std::stoi(value, &used);
-    if (used != value.size() || ring < ('A' - 'A' + 1) || ring > ('Z' - 'A' + 1)) {
+    if (used != value.size() || ring < 1 || ring > ALPHABET_SIZE) {
       throw std::runtime_error("Invalid ring");
     }
     return ring;
