@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "parse_args.h"
+#include "plugboard.h"
 
 int main(int argc, char* argv[]) {
   try {
@@ -19,6 +20,8 @@ int main(int argc, char* argv[]) {
     std::cout << "\nPlugboard: ";
     for (const auto& pair : settings.plugboardPairs) std::cout << pair << ' ';
     std::cout << "\nText: " << settings.text << '\n';
+
+    std::cout << plugboard(settings.text, settings.plugboardPairs) << '\n';
   } catch (const std::exception& e) {
     usage(argv[0], e.what());
   }
