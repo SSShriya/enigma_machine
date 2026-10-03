@@ -55,8 +55,9 @@ void testValidThreeRotorInput() {
 }
 
 void testLowercasePositionIsNormalized() {
-  const EnigmaSettings settings = parse({"enigma", "--rotors", "I", "--positions", "z", "--rings",
-                                         "26", "--reflector", "C", "--text", "X"});
+  const EnigmaSettings settings =
+      parse({"enigma", "--rotors", "I", "I", "I", "--positions", "z", "a", "b", "--rings", "26",
+             "20", "1", "--reflector", "C", "--text", "X"});
 
   expect(settings.positions[0] == 'Z', "Lowercase position should become uppercase.");
 }
@@ -67,14 +68,23 @@ void testMismatchedRotorCountsFail() {
         parse({"enigma", "--rotors", "I", "II", "III", "--positions", "A", "A", "--rings", "1", "1",
                "1", "--reflector", "B", "--text", "TEST"});
       },
-      "counts for rotors");
+      "must all equal");
+}
+
+void testNotEnoughRotorsFail() {
+  expectThrows(
+      [] {
+        parse({"enigma", "--rotors", "I", "II", "--positions", "A", "A", "--rings", "1", "1",
+               "--reflector", "B", "--text", "TEST"});
+      },
+      "must all equal");
 }
 
 void testInvalidRingFails() {
   expectThrows(
       [] {
-        parse({"enigma", "--rotors", "I", "--positions", "A", "--rings", "27", "--reflector", "B",
-               "--text", "TEST"});
+        parse({"enigma", "--rotors", "I", "II", "III", "--positions", "A", "A", "A", "--rings",
+               "27", "24", "1", "--reflector", "B", "--text", "TEST"});
       },
       "Ring settings");
 }
@@ -82,8 +92,8 @@ void testInvalidRingFails() {
 void testInvalidPlugboardPairFails() {
   expectThrows(
       [] {
-        parse({"enigma", "--rotors", "I", "--positions", "A", "--rings", "1", "--reflector", "B",
-               "--plugboard", "ABC", "--text", "TEST"});
+        parse({"enigma", "--rotors", "I", "I", "I", "--positions", "A", "A", "A", "--rings", "1",
+               "2", "3", "--reflector", "B", "--plugboard", "ABC", "--text", "TEST"});
       },
       "plugboard pair");
 }
@@ -96,6 +106,7 @@ int main() {
       {"valid three-rotor input", testValidThreeRotorInput},
       {"lowercase position normalization", testLowercasePositionIsNormalized},
       {"mismatched rotor counts", testMismatchedRotorCountsFail},
+      {"not enough rotor counts", testNotEnoughRotorsFail},
       {"invalid ring", testInvalidRingFails},
       {"invalid plugboard pair", testInvalidPlugboardPairFails},
   };
