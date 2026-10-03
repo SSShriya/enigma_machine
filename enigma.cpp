@@ -21,7 +21,8 @@ int main(int argc, char* argv[]) {
     for (const auto& pair : settings.plugboardPairs) std::cout << pair << ' ';
     std::cout << "\nText: " << settings.text << '\n';
 
-    std::cout << plugboard(settings.text, settings.plugboardPairs) << '\n';
+    Plugboard plugboard = Plugboard(settings.plugboardPairs);
+    std::cout << plugboard.swapLetters(settings.text) << '\n';
   } catch (const std::exception& e) {
     usage(argv[0], e.what());
   }
