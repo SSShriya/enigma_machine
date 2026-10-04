@@ -33,11 +33,17 @@ void Plugboard::connect() {
   for (std::string pair : plugboardPairs_) {
     char fst = static_cast<char>(std::toupper(static_cast<unsigned char>(pair[0])));
     char snd = static_cast<char>(std::toupper(static_cast<unsigned char>(pair[1])));
+
+    if (fst == snd) {
+      throw std::runtime_error("Letters on a plugboard cannot map to themselves");
+    }
+
     int fstIdx = toIdx(fst);
     int sndIdx = toIdx(snd);
     if (mapping_[fstIdx] != fst || mapping_[sndIdx] != snd) {
       throw std::runtime_error("One letter on the plugboard cannot be connected to two things");
     }
+    
     mapping_[fstIdx] = snd;
     mapping_[sndIdx] = fst;
   }

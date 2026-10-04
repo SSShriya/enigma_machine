@@ -27,6 +27,7 @@ TEST_SUPPORT_SOURCES := $(SRC_DIR)/parse_args.cpp \
 						$(SRC_DIR)/utils.cpp \
 			            $(SRC_DIR)/reflector.cpp \
 						$(SRC_DIR)/rotor.cpp \
+						$(SRC_DIR)/machine.cpp
 
 .PHONY: all run test clean
 
