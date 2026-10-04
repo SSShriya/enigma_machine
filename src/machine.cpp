@@ -1,12 +1,9 @@
 #include "machine.h"
+
 #include <string>
 
-EnigmaMachine::EnigmaMachine(
-    Plugboard plugboard,
-    Rotor rightRotor,
-    Rotor middleRotor,
-    Rotor leftRotor,
-    Reflector reflector)
+EnigmaMachine::EnigmaMachine(Plugboard plugboard, Rotor rightRotor, Rotor middleRotor,
+                             Rotor leftRotor, Reflector reflector)
     : plugboard_(std::move(plugboard)),
       rightRotor_(std::move(rightRotor)),
       middleRotor_(std::move(middleRotor)),
@@ -18,11 +15,11 @@ std::string EnigmaMachine::encrypt(std::string text) {
      left rotor, middle rotor, right rotor, plugboard */
   std::string encryptedText;
   for (char c : text) {
-    // don't dod anything for non alpha chars
+    // don't do anything for non alpha chars
     if (!std::isalpha(static_cast<unsigned char>(c))) {
       encryptedText += c;
       continue;
-    }  
+    }
 
     stepRotors();
 
@@ -47,19 +44,18 @@ std::string EnigmaMachine::encrypt(std::string text) {
 }
 
 void EnigmaMachine::stepRotors() {
-
   // check the old positions before any rotor moves.
   const bool middleAtNotch = middleRotor_.atNotch();
-  const bool rightAtNotch = rightRotor_.atNotch();  
+  const bool rightAtNotch = rightRotor_.atNotch();
 
   // step rotors
   if (middleAtNotch) {
     leftRotor_.step();
-  }  
+  }
 
   if (rightAtNotch) {
     middleRotor_.step();
-  }  
+  }
 
   rightRotor_.step();
 }
