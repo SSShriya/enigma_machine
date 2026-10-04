@@ -54,11 +54,11 @@ void testRingSettingChangesMapping() {
   Rotor ring1(rotorIWiring, rotorINotch, 'A', 1);
   Rotor ring2(rotorIWiring, rotorINotch, 'A', 2);
 
-  expectEqual(ring1.encryptChar('A'), 'E', "Rotor I at A/ring 1 should map A to E.");
+  expectEqual(ring1.encryptChar('A'), 'E', "Rotor I at ring 1 should map A to E");
 
-  expectEqual(ring2.encryptChar('A'), 'K', "Rotor I at A/ring 2 should map A to K.");
+  expectEqual(ring2.encryptChar('A'), 'K', "Rotor I at ring 2 should map A to K");
   expect(ring1.encryptChar('A') != ring2.encryptChar('A'),
-         "Changing the ring setting must change the mapping.");
+         "Changing the ring setting must change the mapping");
 }
 
 void testStepChangesMappingWithRingSetting() {
@@ -67,17 +67,17 @@ void testStepChangesMappingWithRingSetting() {
   rotor.step();  
 
   expectEqual(rotor.encryptChar('A'), 'J',
-              "Rotor position must still affect forward mapping when rings are present.");
-  expectEqual(rotor.decryptChar('J'), 'A', "Backward mapping must use the same stepped position.");
+              "Rotor position must still affect forward mapping when rings are present");
+  expectEqual(rotor.decryptChar('J'), 'A', "Backward mapping must use the same stepped position");
 }
 
 void testRingSettingShiftsNotchWindowPosition() {
   Rotor rotor(rotorIWiring, rotorINotch, 'P', 2);
 
-  expect(rotor.atNotch(), "Rotor I ring 2 should be at its turnover notch at P.");
+  expect(rotor.atNotch(), "Rotor I ring 2 should be at its turnover notch at P");
 
   rotor.step();
-  expect(!rotor.atNotch(), "Rotor should leave its notch after stepping.");
+  expect(!rotor.atNotch(), "Rotor should leave its notch after stepping");
 }
 
 void testStepWrapsFromZToA() {
@@ -85,16 +85,16 @@ void testStepWrapsFromZToA() {
 
   rotor.step();
 
-  expectEqual(rotor.encryptChar('A'), 'E', "A rotor stepping from Z must wrap to position A.");
+  expectEqual(rotor.encryptChar('A'), 'E', "A rotor stepping from Z must wrap to position A");
 }
 
 void testNonLettersRemainUnchanged() {
   Rotor rotor(rotorIWiring, rotorINotch, 'A', 7);
 
-  expectEqual(rotor.encryptChar('!'), '!', "Forward path should preserve punctuation.");
-  expectEqual(rotor.decryptChar('7'), '7', "Backward path should preserve digits.");
-  expectEqual(rotor.encryptChar(' '), ' ', "Forward path should preserve spaces.");
-  expectEqual(rotor.decryptChar('\n'), '\n', "Backward path should preserve newlines.");
+  expectEqual(rotor.encryptChar('!'), '!', "Forward path should preserve punctuation");
+  expectEqual(rotor.decryptChar('7'), '7', "Backward path should preserve digits");
+  expectEqual(rotor.encryptChar(' '), ' ', "Forward path should preserve spaces");
+  expectEqual(rotor.decryptChar('\n'), '\n', "Backward path should preserve newlines");
 }
 
 }  // namespace

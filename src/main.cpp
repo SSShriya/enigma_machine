@@ -79,9 +79,9 @@ int main(int argc, char* argv[]) {
     RotorDefinition leftRotorDef = getRotorDefinition(settings.rotors[0]);
     RotorDefinition middleRotorDef = getRotorDefinition(settings.rotors[1]);
     RotorDefinition rightRotorDef = getRotorDefinition(settings.rotors[2]);
-    Rotor leftRotor = Rotor(leftRotorDef.wiring, leftRotorDef.notch, settings.positions[0]);
-    Rotor middleRotor = Rotor(middleRotorDef.wiring, middleRotorDef.notch, settings.positions[1]);
-    Rotor rightRotor = Rotor(rightRotorDef.wiring, rightRotorDef.notch, settings.positions[2]);
+    Rotor leftRotor = Rotor(leftRotorDef.wiring, leftRotorDef.notch, settings.positions[0], settings.rings[0]);
+    Rotor middleRotor = Rotor(middleRotorDef.wiring, middleRotorDef.notch, settings.positions[1], settings.rings[0]);
+    Rotor rightRotor = Rotor(rightRotorDef.wiring, rightRotorDef.notch, settings.positions[2], settings.rings[0]);
 
     Reflector reflector = Reflector(getReflectorWiring(settings.reflector));
 
