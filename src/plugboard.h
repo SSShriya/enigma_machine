@@ -6,8 +6,9 @@
 
 class Plugboard {
  public:
-  Plugboard(std::vector<std::string> plugboardPairs);
+  Plugboard(const std::vector<std::string>& plugboardPairs);
   std::string swapLetters(std::string text);
+  char swapLetter(char c);
 
  private:
   std::array<int, ALPHABET_SIZE> mapping_;

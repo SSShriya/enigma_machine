@@ -72,9 +72,11 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
     if (option == "--rotors") {
       for (auto& value : readValues(argc, argv, i, option)) {
         std::transform(value.begin(), value.end(), value.begin(), ::toupper);
+
         if (validRotors.find(value) == validRotors.end()) {
           throw std::runtime_error("Invalid rotor name: " + value);
         }
+
         settings.rotors.push_back(value);
       }
     } else if (option == "--positions") {
@@ -87,33 +89,45 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
       }
     } else if (option == "--reflector") {
       auto values = readValues(argc, argv, i, option);
-      char value = parseLetter(values[0], option);
+
       if (values.size() != 1) throw std::runtime_error("--reflector needs exactly one value.");
-      if (validReflectors.find(std::string() + value) == validReflectors.end()) {
+      
+      const char value = parseLetter(values[0], option);
+
+      if (validReflectors.find(std::string(1, value)) == validReflectors.end()) {
         throw std::runtime_error("Invalid reflector name: " + values[0]);
       }
+
       settings.reflector = value;
     } else if (option == "--plugboard") {
       settings.plugboardPairs = readValues(argc, argv, i, option);
+
       for (auto& pair : settings.plugboardPairs) {
         if (pair.size() != 2 || !std::isalpha(static_cast<unsigned char>(pair[0])) ||
             !std::isalpha(static_cast<unsigned char>(pair[1]))) {
           throw std::runtime_error("Each plugboard pair must have two letters");
         }
+
         std::transform(pair.begin(), pair.end(), pair.begin(), ::toupper);
       }
     } else if (option == "--text") {
       if (i + 1 >= argc) throw std::runtime_error("--text needs a message.");
+
       std::string text = argv[++i];
       std::transform(text.begin(), text.end(), text.begin(), ::toupper);
+
       settings.text = text;
     } else {
       throw std::runtime_error("Unknown option: " + option);
     }
   }
 
-  if (settings.rotors.empty() || settings.positions.empty() || settings.rings.empty() ||
-      settings.text.empty()) {
+  if (settings.rotors.empty() || 
+      settings.positions.empty() || 
+      settings.reflector == '\0' || 
+      settings.rings.empty() ||
+      settings.text.empty()
+  ) {
     throw std::runtime_error("Missing a required option. Use --help for usage.");
   }
 

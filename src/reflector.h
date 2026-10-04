@@ -2,8 +2,9 @@
 
 class Reflector {
  public:
-  Reflector(std::string wiring);
+  Reflector(const std::string& wiring);
   std::string reflect(std::string text);
+  char reflect(char c);
  private:
   std::string wiring_;
 };

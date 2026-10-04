@@ -4,9 +4,7 @@
 #include <vector>
 
 #include "parse_args.h"
-#include "plugboard.h"
-#include "reflector.h"
-#include "rotor.h"
+#include "machine.h"
 
 /* Rotor + Reflector Wiring strings */
 const std::string WIRING_RTR_I   = "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
@@ -25,12 +23,12 @@ const char NOTCH_RTR_III = 'V';
 const char NOTCH_RTR_IV  = 'J';
 const char NOTCH_RTR_V   = 'Z';
 
+/* Maps for rotors and reflectors */
 struct RotorDefinition {
   std::string wiring;
   char notch;
 }; 
 
-/* Maps for rotors and reflectors */
 const std::map<std::string, RotorDefinition> rotorDefinitions = {
   {"I",   {WIRING_RTR_I,   NOTCH_RTR_I}},
   {"II",  {WIRING_RTR_II,  NOTCH_RTR_II}},
@@ -44,36 +42,6 @@ const std::map<char, std::string> reflectorWiring = {
   {'B', WIRING_RFL_B}, 
   {'C', WIRING_RFL_C}
 };
-
-class EnigmaMachine {
-  public:
-    EnigmaMachine(
-      Plugboard plugboard, 
-      Rotor rightRotor, 
-      Rotor middleRotor, 
-      Rotor leftRotor, 
-      Reflector reflector
-    );
-  
-  private:
-    Plugboard plugboard_;
-    Rotor rightRotor_;
-    Rotor middleRotor_;
-    Rotor leftRotor_;
-    Reflector reflector_;
-};
-
-EnigmaMachine::EnigmaMachine(
-    Plugboard plugboard,
-    Rotor rightRotor,
-    Rotor middleRotor,
-    Rotor leftRotor,
-    Reflector reflector)
-    : plugboard_(std::move(plugboard)),
-      rightRotor_(std::move(rightRotor)),
-      middleRotor_(std::move(middleRotor)),
-      leftRotor_(std::move(leftRotor)),
-      reflector_(std::move(reflector)) {}
 
 std::string getReflectorWiring(char reflectorName) {
   auto it = reflectorWiring.find(reflectorName);
@@ -95,7 +63,6 @@ int main(int argc, char* argv[]) {
   try {
     EnigmaSettings settings = parseArguments(argc, argv);
 
-    // currently just print all settings
     std::cout << "Rotors: ";
     for (const auto& rotor : settings.rotors) std::cout << rotor << ' ';
     std::cout << "\nPositions: ";
@@ -119,6 +86,7 @@ int main(int argc, char* argv[]) {
     Reflector reflector = Reflector(getReflectorWiring(settings.reflector));
 
     EnigmaMachine enigma = EnigmaMachine(plugboard, rightRotor, middleRotor, leftRotor, reflector);
+    std::cout << "Encrypted text: " << enigma.encrypt(settings.text) << '\n';
   } catch (const std::exception& e) {
     usage(argv[0], e.what());
   }
