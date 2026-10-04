@@ -113,7 +113,7 @@ EnigmaSettings parseArguments(int argc, char* argv[]) {
   }
 
   if (settings.rotors.empty() || settings.positions.empty() || settings.rings.empty() ||
-      settings.reflector.empty() || settings.text.empty()) {
+      settings.text.empty()) {
     throw std::runtime_error("Missing a required option. Use --help for usage.");
   }
 

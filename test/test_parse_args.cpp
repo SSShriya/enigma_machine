@@ -49,7 +49,7 @@ void testValidThreeRotorInput() {
          "Positions were not parsed correctly.");
   expect(settings.rings[0] == 1 && settings.rings[2] == 3,
          "Ring settings were not parsed correctly.");
-  expect(settings.reflector == "B", "Reflector was not parsed correctly.");
+  expect(settings.reflector == 'B', "Reflector was not parsed correctly.");
   expect(settings.plugboardPairs.size() == 2, "Expected two plugboard pairs.");
   expect(settings.text == "HELLO WORLD", "Text was not parsed correctly.");
 }
@@ -142,6 +142,6 @@ int main() {
     }
   }
 
-  std::cout << "\n" << passed << " passed, " << failed << " failed\n";
+  std::cout << "\n" << passed << " passed, " << failed << " failed\n\n";
   return failed == 0 ? 0 : 1;
 }

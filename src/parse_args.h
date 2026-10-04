@@ -5,7 +5,7 @@ struct EnigmaSettings {
   std::vector<std::string> rotors;
   std::vector<char> positions;
   std::vector<int> rings;
-  std::string reflector;
+  char reflector;
   std::vector<std::string> plugboardPairs;
   std::string text;
 };
