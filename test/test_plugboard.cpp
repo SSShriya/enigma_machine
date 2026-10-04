@@ -93,6 +93,6 @@ int main() {
     }
   }
 
-  std::cout << "\n" << passed << " passed, " << failed << " failed\n";
+  std::cout << "\n" << passed << " passed, " << failed << " failed\n\n";
   return failed == 0 ? 0 : 1;
 }

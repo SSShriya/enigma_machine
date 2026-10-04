@@ -3,7 +3,7 @@
 
 class Rotor {
  public:
-  Rotor(const std::string& wiring, char notch, char startPos);
+  Rotor(const std::string& wiring, char notch, char startPos, int ringSetting);
   void step();
   bool atNotch();
   char encryptChar(char c);
@@ -14,6 +14,7 @@ class Rotor {
   std::array<char, 26> inverseWiring_;
   int notchIdx_;
   int curIdx_;
+  int ringSetting_;
   char transform(char c, const std::array<char, 26>& mapping);
   
 };

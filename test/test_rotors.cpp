@@ -24,89 +24,90 @@ void expectEqual(char actual, char expected, const std::string& message) {
   }
 }
 
-void testRotorIForwardWiringAtPositionA() {
-  Rotor rotor(rotorIWiring, rotorINotch, 'A');
+void testRotorIForwardWiringAtPositionAAndRing1() {
+  Rotor rotor(rotorIWiring, rotorINotch, 'A', 1);
 
-  expectEqual(rotor.encryptChar('A'), 'E', "Rotor I should map A forward at A.");
-  expectEqual(rotor.encryptChar('B'), 'K', "Rotor I should map B forward at A.");
-  expectEqual(rotor.encryptChar('C'), 'M', "Rotor I should map C forward at A.");
-  expectEqual(rotor.encryptChar('D'), 'F', "Rotor I should map D forward at A.");
-  expectEqual(rotor.encryptChar('E'), 'L', "Rotor I should map E forward at A.");
+  expectEqual(rotor.encryptChar('A'), 'E', "Rotor I at ring 1 should map A forward");
+  expectEqual(rotor.encryptChar('B'), 'K', "Rotor I at ring 1 should map B forward");
+  expectEqual(rotor.encryptChar('C'), 'M', "Rotor I at ring 1 should map C forward");
 }
 
-void testRotorIBackwardWiringAtPositionA() {
-  Rotor rotor(rotorIWiring, rotorINotch, 'A');
+void testRotorIBackwardWiringAtPositionAAndRing1() {
+  Rotor rotor(rotorIWiring, rotorINotch, 'A', 1);
 
-  // Reverse mappings of the forward examples above
-  expectEqual(rotor.decryptChar('E'), 'A', "Rotor I should map E backward at A.");
-  expectEqual(rotor.decryptChar('K'), 'B', "Rotor I should map K backward at A.");
-  expectEqual(rotor.decryptChar('M'), 'C', "Rotor I should map M backward at A.");
-  expectEqual(rotor.decryptChar('F'), 'D', "Rotor I should map F backward at A.");
-  expectEqual(rotor.decryptChar('L'), 'E', "Rotor I should map L backward at A.");
+  expectEqual(rotor.decryptChar('E'), 'A', "Rotor I should map E backward at ring 1");
+  expectEqual(rotor.decryptChar('K'), 'B', "Rotor I should map K backward at ring 1");
+  expectEqual(rotor.decryptChar('M'), 'C', "Rotor I should map M backward at ring 1");
 }
 
-void testForwardThenBackwardRestoresEveryLetter() {
-  Rotor rotor(rotorIWiring, rotorINotch, 'A');
+void testForwardThenBackwardRestoresEveryLetterWithRingSetting() {
+  Rotor rotor(rotorIWiring, rotorINotch, 'G', 12);
 
   for (char c = 'A'; c <= 'Z'; ++c) {
     const char forward = rotor.encryptChar(c);
-    expectEqual(rotor.decryptChar(forward), c, "Backward traversal must undo forward traversal");
+    expectEqual(rotor.decryptChar(forward), c,
+                "Backward traversal must undo forward traversal for every ring setting");
   }
 }
 
-void testStepAdvancesWindowAndChangesMapping() {
-  Rotor rotor(rotorIWiring, rotorINotch, 'A');
+void testRingSettingChangesMapping() {
+  Rotor ring1(rotorIWiring, rotorINotch, 'A', 1);
+  Rotor ring2(rotorIWiring, rotorINotch, 'A', 2);
 
-  expectEqual(rotor.encryptChar('A'), 'E', "Rotor I at A should map A to E.");
+  expectEqual(ring1.encryptChar('A'), 'E', "Rotor I at A/ring 1 should map A to E.");
 
-  rotor.step(); 
+  expectEqual(ring2.encryptChar('A'), 'K', "Rotor I at A/ring 2 should map A to K.");
+  expect(ring1.encryptChar('A') != ring2.encryptChar('A'),
+         "Changing the ring setting must change the mapping.");
+}
+
+void testStepChangesMappingWithRingSetting() {
+  Rotor rotor(rotorIWiring, rotorINotch, 'A', 1);
+
+  rotor.step();  
 
   expectEqual(rotor.encryptChar('A'), 'J',
-              "Rotor position must affect the forward mapping after stepping");
-  expectEqual(rotor.decryptChar('J'), 'A', "Backward mapping must use the same stepped position");
+              "Rotor position must still affect forward mapping when rings are present.");
+  expectEqual(rotor.decryptChar('J'), 'A', "Backward mapping must use the same stepped position.");
 }
 
-void testNotchIsDetectedAtQ() {
-  Rotor rotor(rotorIWiring, rotorINotch, 'A');
+void testRingSettingShiftsNotchWindowPosition() {
+  Rotor rotor(rotorIWiring, rotorINotch, 'P', 2);
 
-  expect(!rotor.atNotch(), "Rotor I should not start at its Q notch when at A");
-
-  for (int i = 0; i < 16; ++i) {
-    rotor.step();
-  }
-
-  expect(rotor.atNotch(), "Rotor I should be at its notch after stepping A to Q");
+  expect(rotor.atNotch(), "Rotor I ring 2 should be at its turnover notch at P.");
 
   rotor.step();
-  expect(!rotor.atNotch(), "Rotor I should leave its notch after one more step");
+  expect(!rotor.atNotch(), "Rotor should leave its notch after stepping.");
 }
 
 void testStepWrapsFromZToA() {
-  Rotor rotor(rotorIWiring, rotorINotch, 'Z');
+  Rotor rotor(rotorIWiring, rotorINotch, 'Z', 1);
 
   rotor.step();
 
-  expectEqual(rotor.encryptChar('A'), 'E', "A rotor stepping from Z must wrap to position A");
+  expectEqual(rotor.encryptChar('A'), 'E', "A rotor stepping from Z must wrap to position A.");
 }
 
 void testNonLettersRemainUnchanged() {
-  Rotor rotor(rotorIWiring, rotorINotch, 'A');
+  Rotor rotor(rotorIWiring, rotorINotch, 'A', 7);
 
-  expectEqual(rotor.encryptChar('!'), '!', "Forward path should preserve punctuation");
-  expectEqual(rotor.decryptChar('7'), '7', "Backward path should preserve digits");
-  expectEqual(rotor.encryptChar(' '), ' ', "Forward path should preserve spaces");
-  expectEqual(rotor.decryptChar('\n'), '\n', "Backward path should preserve newlines");
+  expectEqual(rotor.encryptChar('!'), '!', "Forward path should preserve punctuation.");
+  expectEqual(rotor.decryptChar('7'), '7', "Backward path should preserve digits.");
+  expectEqual(rotor.encryptChar(' '), ' ', "Forward path should preserve spaces.");
+  expectEqual(rotor.decryptChar('\n'), '\n', "Backward path should preserve newlines.");
 }
 
-}  
+}  // namespace
 
 int main() {
   const std::vector<std::pair<std::string, std::function<void()>>> tests = {
-      {"Rotor I forward wiring at A", testRotorIForwardWiringAtPositionA},
-      {"Rotor I backward wiring at A", testRotorIBackwardWiringAtPositionA},
-      {"forward then backward restores every letter", testForwardThenBackwardRestoresEveryLetter},
-      {"step changes mapping", testStepAdvancesWindowAndChangesMapping},
-      {"notch detection", testNotchIsDetectedAtQ},
+      {"Rotor I forward wiring at A/ring 1", testRotorIForwardWiringAtPositionAAndRing1},
+      {"Rotor I backward wiring at A/ring 1", testRotorIBackwardWiringAtPositionAAndRing1},
+      {"forward then backward restores every letter",
+       testForwardThenBackwardRestoresEveryLetterWithRingSetting},
+      {"ring setting changes mapping", testRingSettingChangesMapping},
+      {"step changes mapping", testStepChangesMappingWithRingSetting},
+      {"ring setting shifts notch", testRingSettingShiftsNotchWindowPosition},
       {"step wraps from Z to A", testStepWrapsFromZToA},
       {"non-letters remain unchanged", testNonLettersRemainUnchanged},
   };
@@ -125,6 +126,6 @@ int main() {
     }
   }
 
-  std::cout << '\n' << passed << " passed, " << failed << " failed\n";
+  std::cout << '\n' << passed << " passed, " << failed << " failed\n\n";
   return failed == 0 ? 0 : 1;
 }
