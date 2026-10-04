@@ -12,7 +12,8 @@ APP_SOURCES := $(SRC_DIR)/enigma.cpp \
                $(SRC_DIR)/parse_args.cpp \
                $(SRC_DIR)/plugboard.cpp \
 			   $(SRC_DIR)/utils.cpp \
-			   $(SRC_DIR)/reflector.cpp
+			   $(SRC_DIR)/reflector.cpp \
+			   $(SRC_DIR)/rotor.cpp
 APP := $(BUILD_DIR)/enigma
 
 # Every .cpp file in test/ becomes a separately runnable test executable
@@ -23,7 +24,8 @@ TEST_BINS := $(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/%,$(TEST_SOURCES))
 TEST_SUPPORT_SOURCES := $(SRC_DIR)/parse_args.cpp \
                         $(SRC_DIR)/plugboard.cpp \
 						$(SRC_DIR)/utils.cpp \
-			            $(SRC_DIR)/reflector.cpp
+			            $(SRC_DIR)/reflector.cpp \
+						$(SRC_DIR)/rotor.cpp
 
 .PHONY: all run test clean
 

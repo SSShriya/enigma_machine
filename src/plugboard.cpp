@@ -31,7 +31,7 @@ void Plugboard::connect() {
     int fstIdx = toIdx(fst);
     int sndIdx = toIdx(snd);
     if (mapping_[fstIdx] != fst || mapping_[sndIdx] != snd) {
-      throw std::runtime_error("A letter on the plugboard cannot be connected to two things");
+      throw std::runtime_error("One letter on the plugboard cannot be connected to two things");
     }
     mapping_[fstIdx] = snd;
     mapping_[sndIdx] = fst;
