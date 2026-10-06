@@ -6,7 +6,7 @@
 Reflector::Reflector(const std::string& wiring): wiring_(wiring) {}
 
 /* Replaces all characters with their corresponding chars in the wiring table */
-std::string Reflector::reflect(std::string text) {
+std::string Reflector::reflect(std::string text) const {
   for (char& c : text) {
     c = reflect(c);
   }
@@ -14,7 +14,7 @@ std::string Reflector::reflect(std::string text) {
 }
 
 /* Replaces one character with its corresponding char in the wiring table */
-char Reflector::reflect(char c) {
+char Reflector::reflect(char c) const {
   if (!std::isalpha(c)) {
     return c;
   }

@@ -19,12 +19,12 @@ void Rotor::step() {
 }
 
 /* Returns true if the rotor is at its notch */
-bool Rotor::atNotch() {
+bool Rotor::atNotch() const {
   return curIdx_ == (notchIdx_ - ringSetting_ + ALPHABET_SIZE) % ALPHABET_SIZE;
 }
 
 /* Uses the wiring table to encrypt a character */
-char Rotor::transform(char c, const std::array<char, 26>& mapping) {
+char Rotor::transform(char c, const std::array<char, 26>& mapping) const {
   if (!std::isalpha(static_cast<unsigned char>(c))) {
      return c;
   }  
@@ -41,10 +41,10 @@ char Rotor::transform(char c, const std::array<char, 26>& mapping) {
   return static_cast<char>('A' + outputIndex);
 }
 
-char Rotor::encryptChar(char c) {
+char Rotor::encryptChar(char c) const {
     return transform(c, wiring_);
 }
 
-char Rotor::decryptChar(char c) {
+char Rotor::decryptChar(char c) const {
     return transform(c, inverseWiring_);
 }
